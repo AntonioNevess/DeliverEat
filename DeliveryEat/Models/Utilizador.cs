@@ -1,4 +1,6 @@
-﻿namespace DeliveryEat.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DeliveryEat.Models
 {
 
     /// <summary>
@@ -46,5 +48,19 @@
         public string CP { get; set;}
         //Nome da Localidade
         public string Localidade { get; set; }
+
+
+        /// <summary>
+        /// Lista de Pedidos associados a um utilizador
+        /// </summary>
+        public ICollection<Pedido> ListaPedido { get; set; }
+
+        /// <summary>
+        /// FK para o pedido 
+        /// </summary>
+        [ForeignKey(nameof(Pedido))]
+        public int PedidoFK { get; set; }
+        public Pedido Pedido { get; set; }
+
     }
 }

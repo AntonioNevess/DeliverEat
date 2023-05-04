@@ -1,10 +1,15 @@
-﻿namespace DeliveryEat.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DeliveryEat.Models
 {
     /// <summary>
     /// descrição do restaurante 
     /// </summary>
     public class Restaurante
     {
+        public Restaurante(){
+            ListaMenu = new HashSet<Menu>();
+        }
         /*
          * Modelo de BD no seguinte link
          * https://app.quickdatabasediagrams.com/#/d/yQ7Nly
@@ -40,5 +45,21 @@
         public string CP { get; set; }
         //Nome da Localidade
         public string Localidade { get; set; }
+
+        //******************************************************
+
+        /// <summary>
+        /// Lista de items do Menu associados a um restaurante
+        /// </summary>
+        public ICollection<Menu> ListaMenu { get; set; }
+
+
+        /// <summary>
+        /// FK para o menu
+        /// </summary>
+        [ForeignKey(nameof(Menu))]
+        public int MenuFK { get; set; }
+        public Menu Menu { get; set; }
+
     }
 }
