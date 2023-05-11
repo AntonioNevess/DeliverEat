@@ -6,12 +6,16 @@ namespace DeliveryEat.Models
     /// <summary>
     /// Descrição dos utilizadores 
     /// </summary>
-    public class Utilizador
+    public class Pessoa
     {
         /*
          * Modelo de BD no seguinte link
          * https://app.quickdatabasediagrams.com/#/d/yQ7Nly
          */
+
+        public Pessoa() {
+            ListaPedido = new HashSet<Pedido>();
+        } 
 
         /// <summary>
         /// PK 
@@ -49,18 +53,13 @@ namespace DeliveryEat.Models
         //Nome da Localidade
         public string Localidade { get; set; }
 
+        //******************
 
         /// <summary>
-        /// Lista de Pedidos associados a um utilizador
+        /// FK Lista de Pedidos associados a um utilizador
         /// </summary>
         public ICollection<Pedido> ListaPedido { get; set; }
 
-        /// <summary>
-        /// FK para o pedido 
-        /// </summary>
-        [ForeignKey(nameof(Pedido))]
-        public int PedidoFK { get; set; }
-        public Pedido Pedido { get; set; }
 
     }
 }
