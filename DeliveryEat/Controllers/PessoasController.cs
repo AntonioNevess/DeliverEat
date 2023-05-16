@@ -10,22 +10,22 @@ using DeliveryEat.Models;
 
 namespace DeliveryEat.Controllers
 {
-    public class PessoaController : Controller
+    public class PessoasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PessoaController(ApplicationDbContext context)
+        public PessoasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Pessoa
+        // GET: Pessoas
         public async Task<IActionResult> Index()
         {
               return View(await _context.Pessoas.ToListAsync());
         }
 
-        // GET: Pessoa/Details/5
+        // GET: Pessoas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Pessoas == null)
@@ -43,13 +43,13 @@ namespace DeliveryEat.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Create
+        // GET: Pessoas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Pessoa/Create
+        // POST: Pessoas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,7 +65,7 @@ namespace DeliveryEat.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Edit/5
+        // GET: Pessoas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Pessoas == null)
@@ -81,7 +81,7 @@ namespace DeliveryEat.Controllers
             return View(pessoa);
         }
 
-        // POST: Pessoa/Edit/5
+        // POST: Pessoas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,7 +116,7 @@ namespace DeliveryEat.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoa/Delete/5
+        // GET: Pessoas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Pessoas == null)
@@ -134,7 +134,7 @@ namespace DeliveryEat.Controllers
             return View(pessoa);
         }
 
-        // POST: Pessoa/Delete/5
+        // POST: Pessoas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
