@@ -18,10 +18,11 @@ namespace DeliveryEat.Data
         * Criação das Tabelas
         * ********************************************* */
 
-        public DbSet<Restaurante> Restaurante { get; set; }
-        public DbSet<Menu> Menu {get; set; }
-        public DbSet<Pedido> Pedido { get; set; }  
-        public DbSet<Utilizador> Utilizador { get; set;}
+        public DbSet<Restaurante> Restaurantes { get; set; }
+        public DbSet<Prato> Pratos { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<DetalhesPedido> DetalhesPedidos { get; set; }
+        public DbSet<Pessoa> Pessoas { get; set; }
 
     }
 }

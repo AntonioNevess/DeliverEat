@@ -1,4 +1,6 @@
-﻿namespace DeliveryEat.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DeliveryEat.Models
 {
     /// <summary>
     /// Descrição do pedido
@@ -11,8 +13,7 @@
          */
 
         public Pedido() { 
-            ListaMenu = new HashSet<Menu>();    
-            ListaUtilizador = new HashSet<Utilizador>();
+            ListaPrato = new HashSet<Prato>();    
         } 
         /// <summary>
         /// PK
@@ -20,19 +21,26 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Quantidade do item do menu
-        /// </summary>
-        public int Quantidade { get; set; }
-
-        /// <summary>
-        /// Lista de um Utilizador
-        /// </summary>
-        public ICollection<Utilizador> ListaUtilizador { get; }
-
-        /// <summary>
-        /// M-N
         /// Lista de Items do menu no carrinho de um utilizador especifico
         /// </summary>
-        public ICollection<Menu> ListaMenu { get; set; }
+        public ICollection<Prato> ListaPrato { get; set; }
+
+        //*********************
+        //Falta as FK
+
+        /// <summary>
+        /// FK para a tabela Pessoa
+        /// </summary>
+        [ForeignKey(nameof(Pessoas))]
+        public int PessoaFK { get; set;}
+        public Pessoa Pessoas { get; set; }
+        
+        /// <summary>
+        /// Fk para a tabela DetalhesPedido
+        /// </summary>
+        [ForeignKey(nameof(DetalhesPedidos))]
+        public int DetalhesPedidoFK { get; set; }
+        public DetalhesPedido DetalhesPedidos { get; set; }
+        
     }
 }

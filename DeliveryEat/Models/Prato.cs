@@ -3,18 +3,19 @@
 namespace DeliveryEat.Models
 {
     /// <summary>
-    /// Descrição do menu
+    /// Descrição do Prato
     /// </summary>
-    public class Menu
+    public class Prato
     {
         /*
          * Modelo de BD no seguinte link
          * https://app.quickdatabasediagrams.com/#/d/yQ7Nly
          */
 
-        public Menu() { 
-            ListaPedido = new HashSet<Pedido>();
-            ListaMenu  =new HashSet<Menu>();    
+        public Prato() { 
+            ListaDetalhePedidos = new HashSet<DetalhesPedido>();
+            ListaRestaurantes = new HashSet<Restaurante>();
+        
         }
         /// <summary>
         /// PK
@@ -22,7 +23,7 @@ namespace DeliveryEat.Models
         public int Id { get; set; } 
 
         /// <summary>
-        /// Nome do Menu
+        /// Nome do Prato
         /// </summary>
         public string Nome { get; set; }
 
@@ -42,27 +43,26 @@ namespace DeliveryEat.Models
         /// <summary>
         /// Lista de Pedidos de um restaurante
         /// </summary>
-        public ICollection<Pedido> ListaPedido { get; set; }
+        public ICollection<DetalhesPedido> ListaDetalhePedidos { get; set; }
 
+        public ICollection<Restaurante> ListaRestaurantes { get; set; }
+
+
+
+        /*
         /// <summary>
-        /// Lista de Menus de um restaurante
+        /// FK para a yabela detalhe_pedido 
         /// </summary>
-        public ICollection<Menu> ListaMenu { get; set; }
-
-
-        /// <summary>
-        /// FK para o pedido 
-        /// </summary>
-        [ForeignKey(nameof(Pedido))]
-        public int PedidoFK { get; set; }
-        public Pedido Pedido { get; set; }
+        [ForeignKey(nameof(DetalhePedidos))]
+        public int DetalhePedidoFK { get; set; }
+        public DetalhesPedido DetalhePedidos { get; set; }
 
         /// <summary>
         /// FK para o restaurante
         /// </summary>
-        [ForeignKey(nameof(Restaurante))]
+        [ForeignKey(nameof(Restaurantes))]
         public int RestauranteFK { get; set;}
-        public Restaurante Restaurante { get; set; }
+        public Restaurante Restaurantes { get; set; }*/
        
 
     }

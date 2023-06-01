@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿    using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryEat.Models
 {
@@ -8,7 +8,7 @@ namespace DeliveryEat.Models
     public class Restaurante
     {
         public Restaurante(){
-            ListaMenu = new HashSet<Menu>();
+            ListaPratos = new HashSet<Prato>();
         }
         /*
          * Modelo de BD no seguinte link
@@ -49,17 +49,11 @@ namespace DeliveryEat.Models
         //******************************************************
 
         /// <summary>
-        /// Lista de items do Menu associados a um restaurante
+        /// Lista de items do Prato associados a um restaurante
         /// </summary>
-        public ICollection<Menu> ListaMenu { get; set; }
+        public ICollection<Prato> ListaPratos { get; set; }
 
 
-        /// <summary>
-        /// FK para o menu
-        /// </summary>
-        [ForeignKey(nameof(Menu))]
-        public int MenuFK { get; set; }
-        public Menu Menu { get; set; }
 
     }
 }
