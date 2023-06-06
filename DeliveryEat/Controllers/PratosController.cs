@@ -54,8 +54,12 @@ namespace DeliveryEat.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco")] Prato prato)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco,PrecoPratoAux")] Prato prato)
         {
+            if (!string.IsNullOrEmpty(prato.PrecoPratoAux)) {
+                prato.Preco = Convert.ToDecimal(prato.PrecoPratoAux.Replace('.', ','));
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(prato);

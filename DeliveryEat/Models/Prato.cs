@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeliveryEat.Models
 {
@@ -35,8 +36,12 @@ namespace DeliveryEat.Models
         /// <summary>
         /// Preço do menu
         /// </summary>
-        public int Preco { get; set; }  
+        public decimal Preco { get; set; }
 
+        [NotMapped] // esta anotação impede a EF de exportar este atributo para a BD
+        [RegularExpression("[0-9]+(.|,)?[0-9]{0,2}", ErrorMessage = "Só pode escrever algarismos e, " + "se desejar, duas casas decimais no {0}")]
+        [Display(Name = "Preço")]
+        public string PrecoPratoAux { get; set; }
         
         //**********************************************************
 
