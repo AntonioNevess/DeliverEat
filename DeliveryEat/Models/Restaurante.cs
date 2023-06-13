@@ -37,6 +37,12 @@ namespace DeliveryEat.Models
 
 
         /// <summary>
+        ///Nome do ficheiro com a fotografia do Prato
+        /// </summary>
+        public string NomeFotografia { get; set; }
+
+
+        /// <summary>
         /// Dados referentes à morada
         /// </summary>
         //Nome da rua

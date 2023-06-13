@@ -34,6 +34,11 @@ namespace DeliveryEat.Models
         public string Descricao { get; set; }
 
         /// <summary>
+        ///Nome do ficheiro com a fotografia do Prato
+        /// </summary>
+        public string NomeFotografia { get; set; }
+
+        /// <summary>
         /// Preço do menu
         /// </summary>
         public decimal Preco { get; set; }
