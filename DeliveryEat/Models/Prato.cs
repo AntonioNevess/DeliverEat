@@ -21,16 +21,24 @@ namespace DeliveryEat.Models
         /// <summary>
         /// PK
         /// </summary>
-        public int Id { get; set; } 
+        public int Id { get; set; }
 
         /// <summary>
         /// Nome do Prato
         /// </summary>
+        ///
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [Display(Name = "Nome do Prato")]
+        [StringLength(50)]
         public string Nome { get; set; }
 
         /// <summary>
         /// Descrição do menu
         /// </summary>
+        /// 
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [Display(Name = "Descrição")]
+        [StringLength(250)]
         public string Descricao { get; set; }
 
         /// <summary>

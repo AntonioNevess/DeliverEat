@@ -61,6 +61,8 @@ namespace DeliveryEat.Models
         /// Dados referentes à morada
         /// </summary>
         //Nome da rua
+        [DisplayName("Rua")]
+        [StringLength(100)]
         public string Rua { get; set; }
         //Código Postal
         [DisplayName("Código Postal")]
@@ -69,6 +71,8 @@ namespace DeliveryEat.Models
         [StringLength(25)]
         public string CP { get; set;}
         //Nome da Localidade
+        [DisplayName("Rua")]
+        [StringLength(100)]
         public string Localidade { get; set; }
 
         //******************
