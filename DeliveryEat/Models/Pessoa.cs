@@ -75,6 +75,10 @@ namespace DeliveryEat.Models
         [StringLength(100)]
         public string Localidade { get; set; }
 
+        //**************************
+        // Este atributo permite relacionar a Pessoa com a autenticação
+        public String UserId { get; set; }  
+
         //******************
 
         /// <summary>

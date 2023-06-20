@@ -54,7 +54,7 @@ namespace DeliveryEat.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Telefone,Descricao,Rua,CP,Localidade")] Restaurante restaurante)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Telefone,Descricao,Email,NomeFotografia,Rua,CP,Localidade")] Restaurante restaurante)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace DeliveryEat.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Telefone,Descricao,Rua,CP,Localidade")] Restaurante restaurante)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Telefone,Descricao,Email,NomeFotografia,Rua,CP,Localidade")] Restaurante restaurante)
         {
             if (id != restaurante.Id)
             {
