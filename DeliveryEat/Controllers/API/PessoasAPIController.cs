@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
-
-using static DeliveryEat.Models.ViewModel;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace DeliveryEat.Controllers.Api
 {
@@ -32,16 +30,10 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PessoasAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas()
+        public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas()
         {
-            return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel
-            {
-                Id = p.Id,
-                Nome = p.Nome
-            }).ToListAsync();
-
+            return await _context.Pessoas.ToListAsync();
         }
-
 
         // GET: api/PessoasAPI/5
         [HttpGet("{id}")]

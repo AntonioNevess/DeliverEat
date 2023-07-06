@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
-using static DeliveryEat.Models.ViewModel;
 
 namespace DeliveryEat.Controllers.Api
 {
@@ -24,29 +23,16 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/RestaurantesAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RestauranteViewModel>>> GetRestaurantes()
+        public async Task<ActionResult<IEnumerable<Restaurante>>> GetRestaurantes()
         {
-            return await _context.Restaurantes.Select(r => new RestauranteViewModel
-            {
-                Id = r.Id,
-                Nome = r.Nome,
-                CP = r.CP
-            }).ToListAsync();
+            return await _context.Restaurantes.ToListAsync();
         }
 
         // GET: api/RestaurantesAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RestauranteViewModel>> GetRestaurante(int id)
+        public async Task<ActionResult<Restaurante>> GetRestaurante(int id)
         {
-            var restaurante = await _context.Restaurantes
-                .Select(r => new RestauranteViewModel
-                {
-                    Id = r.Id,
-                    Nome = r.Nome,
-                    CP = r.CP
-                }).Where(r => r.Id == id)
-                .FirstOrDefaultAsync();
-
+            var restaurante = await _context.Restaurantes.FindAsync(id);
 
             if (restaurante == null)
             {

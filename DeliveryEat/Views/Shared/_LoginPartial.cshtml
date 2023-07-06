@@ -16,7 +16,7 @@
         //se um utilizador chega aqui é porque está autenticado
 
         var utilizador = await _userManager.GetUserAsync(User);
-        string nomeUser = utilizador.UserName;
+        string nomeUser = utilizador.Nome;
         var rolesUser = await _userManager.GetRolesAsync(utilizador);
 
         <li class="nav-item">
