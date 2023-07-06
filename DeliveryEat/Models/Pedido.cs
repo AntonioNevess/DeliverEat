@@ -38,9 +38,9 @@ namespace DeliveryEat.Models
         /// <summary>
         /// Fk para a tabela DetalhesPedido
         /// </summary>
-        [ForeignKey(nameof(DetalhesPedidos))]
-        public int DetalhesPedidoFK { get; set; }
-        public DetalhesPedido DetalhesPedidos { get; set; }
+        ///[ForeignKey(nameof(DetalhesPedidos))]
+        ///public int DetalhesPedidoFK { get; set; }
+        ///public DetalhesPedido DetalhesPedidos { get; set; }
         
     }
 }

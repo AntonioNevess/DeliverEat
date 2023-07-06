@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
+using static DeliveryEat.Models.ViewModel;
 
 namespace DeliveryEat.Controllers.Api
 {
@@ -23,16 +24,29 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PratosAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Prato>>> GetPratos()
+        public async Task<ActionResult<IEnumerable<PratoViewModel>>> GetPratos()
         {
-            return await _context.Pratos.ToListAsync();
+            return await _context.Pratos.Include(p => p.Restaurante)
+                .Select(p => new PratoViewModel
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    Restaurante = p.Restaurante.Nome
+                }).ToListAsync();
         }
 
         // GET: api/PratosAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Prato>> GetPrato(int id)
+        public async Task<ActionResult<PratoViewModel>> GetPrato(int id)
         {
-            var prato = await _context.Pratos.FindAsync(id);
+            var prato = await _context.Pratos.Include(p => p.Restaurante)
+                .Select(p => new PratoViewModel
+                {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    Restaurante = p.Restaurante.Nome
+                }).Where(p => p.Id == id).FirstOrDefaultAsync();
+
 
             if (prato == null)
             {

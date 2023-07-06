@@ -49,9 +49,10 @@
             }
 
             @if (Context.User.IsInRole("Cliente")) {
-                <td>
-                    <a asp-action="Index" asp-controller="Pratos">Lista Pratos</a>
-                </td>
+                    <td>
+                        <a asp-action="Index" asp-controller="Pratos" asp-route-restauranteId="@item.Id">Lista Pratos</a>
+                    </td>
+
             }
         </tr>
 }
