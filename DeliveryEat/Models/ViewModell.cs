@@ -25,6 +25,13 @@
             public string Nome { get; set; }   
             public string Restaurante { get; set; } 
         }
+        public class LoginViewModel
+        {
+            public string Email { get; set; }
+
+            public string Password { get; set; }
+        }
+
 
         public class ErrorViewModel
         {
