@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
+using Microsoft.AspNetCore.Identity;
 
 using static DeliveryEat.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
@@ -19,8 +20,6 @@ namespace DeliveryEat.Controllers.Api
     public class PessoasAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public PessoasAPIController(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
@@ -33,7 +32,7 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PessoasAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas()
+        public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas()
         {
             return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel
             {
@@ -89,9 +88,9 @@ namespace DeliveryEat.Controllers.Api
             return NoContent();
         }
 
-        // POST: api/PessoasAPI/Register
+        // POST: api/PessoasAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
         {
             //cria um Utilizador com as respetivas informaçõs fornecidas

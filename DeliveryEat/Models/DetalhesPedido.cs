@@ -6,7 +6,11 @@ namespace DeliveryEat.Models
     public class DetalhesPedido
     {
 
-        
+        public DetalhesPedido()
+        {
+            ListaPedidos = new HashSet<Pedido>();
+            ListaPratos = new HashSet<Prato>();
+        }
         /// <summary>
         /// PK
         /// </summary>
@@ -33,22 +37,19 @@ namespace DeliveryEat.Models
         public string PrecoPedidoAux { get; set; }
 
 
+
+
         //*************************
 
         /// <summary>
-        /// Fk para a tabela Pedidos
+        /// Lista de de pedido 
         /// </summary>
-        [ForeignKey(nameof(Pedidos))]
-        public int PedidosFK { get; set; }
-        public Pedido Pedidos { get; set; }
+        public ICollection<Pedido> ListaPedidos { get; }
 
         /// <summary>
-        /// Fk para a tabela Pratos
+        /// Lista de pratos 
         /// </summary>
-        [ForeignKey(nameof(Pratos))]
-        public int PratoFK { get; set; }
-        public Prato Pratos { get; set; }
-
+        public ICollection<Prato> ListaPratos { get; set; }
 
     }
 }

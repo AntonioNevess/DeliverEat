@@ -20,29 +20,10 @@ namespace DeliveryEat.Controllers
         }
 
         // GET: Pratos
-        // GET: Pratos
-        public async Task<IActionResult> Index(int? restauranteId)
+        public async Task<IActionResult> Index()
         {
-            if (restauranteId == null)
-            {
-                return NotFound();
-            }
-
-            // Retrieve the selected restaurant
-            var restaurante = await _context.Restaurantes.FindAsync(restauranteId);
-            if (restaurante == null)
-            {
-                return NotFound();
-            }
-
-            // Retrieve the plates for the selected restaurant
-            var pratos = await _context.Pratos
-                .Where(p => p.RestauranteFK == restauranteId)
-                .ToListAsync();
-
-            return View(pratos);
+              return View(await _context.Pratos.ToListAsync());
         }
-
 
         // GET: Pratos/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -65,38 +46,28 @@ namespace DeliveryEat.Controllers
         // GET: Pratos/Create
         public IActionResult Create()
         {
-            ViewBag.RestauranteFK = new SelectList(_context.Restaurantes, "Id", "Nome");
             return View();
         }
-
 
         // POST: Pratos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco,PrecoPratoAux,RestauranteFK")] Prato prato)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,Preco,PrecoPratoAux")] Prato prato)
         {
-            if (!string.IsNullOrEmpty(prato.PrecoPratoAux))
-            {
+            if (!string.IsNullOrEmpty(prato.PrecoPratoAux)) {
                 prato.Preco = Convert.ToDecimal(prato.PrecoPratoAux.Replace('.', ','));
             }
 
             if (ModelState.IsValid)
             {
-                // Get the selected restaurante ID from the dropdown
-                int selectedRestauranteId = prato.RestauranteFK;
-
-                // Set the RestauranteFK property with the selected ID
-                prato.RestauranteFK = selectedRestauranteId;
-
                 _context.Add(prato);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(prato);
         }
-
 
         // GET: Pratos/Edit/5
         public async Task<IActionResult> Edit(int? id)
