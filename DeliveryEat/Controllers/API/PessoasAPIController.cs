@@ -16,15 +16,9 @@ namespace DeliveryEat.Controllers.Api
     public class PessoasAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public PessoasAPIController(ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+        public PessoasAPIController(ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
@@ -80,71 +74,18 @@ namespace DeliveryEat.Controllers.Api
             return NoContent();
         }
 
-        // POST: api/PessoasAPI/Register
+        // POST: api/PessoasAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
         {
-            //cria um Utilizador com as respetivas informaçõs fornecidas
-            var user = new ApplicationUser {
-                UserName = pessoa.Email,
-                Email = pessoa.Email,
-                Nome = pessoa.Nome,
-                DataRegisto = DateTime.Now,
-                EmailConfirmed = true 
-            };
+            _context.Pessoas.Add(pessoa);
+            await _context.SaveChangesAsync();
 
-            string password = pessoa.Password;
-
-            var result = await _userManager.CreateAsync(user, password);
-
-            if(result.Succeeded) {
-                await _userManager.AddToRoleAsync(user, "Cliente");
-                pessoa.UserId = user.Id; 
-                
-                try {
-                    _context.Pessoas.Add(pessoa);
-                    await _context.SaveChangesAsync();
-                }catch {
-                    _context.Pessoas.Remove(pessoa);
-                    await _context.SaveChangesAsync();
-                }
-
-                return CreatedAtAction("GetPessoa", new { id = pessoa.Id }, pessoa);
-            } else {
-                return BadRequest(result.Errors);
-            }
+            return CreatedAtAction("GetPessoa", new { id = pessoa.Id }, pessoa);
         }
 
-        // POST: api/PessoasAPI/Login
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(Login login) {
-           var user = await _userManager.FindByEmailAsync(login.Email);
-
-            if(user == null) {
-                return BadRequest("Email inválido");
-            }
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, lockoutOnFailure: false);
-
-            if(!result.Succeeded) {
-                return BadRequest("Password inválida");
-            }
-
-            var pessoa = await _context.Pessoas.FirstOrDefaultAsync(i => i.UserId == user.Id);
-
-            return Ok(new {PessoaID = pessoa.Id});
-        }
-
-        // POST: api/PessoasAPI/Logout
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout() {
-            await _signInManager.SignOutAsync();
-
-            return Ok(new {Message = "Saiu com sucesso"});
-        }
+        
 
         // DELETE: api/PessoasAPI/5
         [HttpDelete("{id}")]
