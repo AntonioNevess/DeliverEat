@@ -22,7 +22,7 @@ namespace DeliveryEat.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Pedidos.Include(p => p.DetalhesPedidos).Include(p => p.Pessoas);
+            var applicationDbContext = _context.Pedidos.Include(p => p.Pessoas);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace DeliveryEat.Controllers
             }
 
             var pedido = await _context.Pedidos
-                .Include(p => p.DetalhesPedidos)
+                //.Include(p => p.DetalhesPedidos)
                 .Include(p => p.Pessoas)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pedido == null)
@@ -67,7 +67,7 @@ namespace DeliveryEat.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
+            //ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
             ViewData["PessoaFK"] = new SelectList(_context.Pessoas, "Id", "Id", pedido.PessoaFK);
             return View(pedido);
         }
@@ -85,7 +85,7 @@ namespace DeliveryEat.Controllers
             {
                 return NotFound();
             }
-            ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
+            //ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
             ViewData["PessoaFK"] = new SelectList(_context.Pessoas, "Id", "Id", pedido.PessoaFK);
             return View(pedido);
         }
@@ -122,7 +122,7 @@ namespace DeliveryEat.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
+            //ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
             ViewData["PessoaFK"] = new SelectList(_context.Pessoas, "Id", "Id", pedido.PessoaFK);
             return View(pedido);
         }
@@ -136,7 +136,7 @@ namespace DeliveryEat.Controllers
             }
 
             var pedido = await _context.Pedidos
-                .Include(p => p.DetalhesPedidos)
+                //.Include(p => p.DetalhesPedidos)
                 .Include(p => p.Pessoas)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pedido == null)
