@@ -15,7 +15,7 @@ namespace DeliveryEat.Models
 
         public Prato() { 
             ListaDetalhePedidos = new HashSet<DetalhesPedido>();
-            ListaRestaurantes = new HashSet<Restaurante>();
+            //ListaRestaurantes = new HashSet<Restaurante>();
         
         }
         /// <summary>
@@ -55,18 +55,22 @@ namespace DeliveryEat.Models
         [RegularExpression("[0-9]+(.|,)?[0-9]{0,2}", ErrorMessage = "Só pode escrever algarismos e, " + "se desejar, duas casas decimais no {0}")]
         [Display(Name = "Preço")]
         public string PrecoPratoAux { get; set; }
-        
+
         //**********************************************************
+        [ForeignKey(nameof(Restaurante))]
+        public int RestauranteFK { get; set; }
+        public Restaurante Restaurante { get; set; }
+
 
         /// <summary>
         /// Lista de Pedidos de um restaurante
         /// </summary>
         public ICollection<DetalhesPedido> ListaDetalhePedidos { get; set; }
 
-        public ICollection<Restaurante> ListaRestaurantes { get; set; }
+        //public ICollection<Restaurante> ListaRestaurantes { get; set; }
 
 
-
+   
         /*
         /// <summary>
         /// FK para a yabela detalhe_pedido 

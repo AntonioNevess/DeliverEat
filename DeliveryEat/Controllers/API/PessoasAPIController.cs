@@ -18,7 +18,7 @@ namespace DeliveryEat.Controllers.Api
     public class PessoasAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         public PessoasAPIController(ApplicationDbContext context,
@@ -32,8 +32,11 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PessoasAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas() {
-            return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel {
+
+        public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas()
+        {
+            return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel
+            {
                 Id = p.Id,
                 Nome = p.Nome
             }).ToListAsync();
@@ -87,7 +90,9 @@ namespace DeliveryEat.Controllers.Api
 
         // POST: api/PessoasAPI/Register
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("Create")]
+
+        [HttpPost("create")]
+
         public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
         {
             //cria um Utilizador com as respetivas informaçõs fornecidas

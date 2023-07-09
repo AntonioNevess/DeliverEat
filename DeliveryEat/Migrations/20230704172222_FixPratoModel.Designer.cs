@@ -4,6 +4,7 @@ using DeliveryEat.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryEat.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230704172222_FixPratoModel")]
+    partial class FixPratoModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,12 +107,6 @@ namespace DeliveryEat.Migrations
                     b.Property<string>("NomePrato")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PedidosFK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PratoFK")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(18,2)");
 
@@ -117,10 +114,6 @@ namespace DeliveryEat.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PedidosFK");
-
-                    b.HasIndex("PratoFK");
 
                     b.ToTable("DetalhesPedidos");
                 });
@@ -133,10 +126,15 @@ namespace DeliveryEat.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DetalhesPedidoFK")
+                        .HasColumnType("int");
+
                     b.Property<int>("PessoaFK")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DetalhesPedidoFK");
 
                     b.HasIndex("PessoaFK");
 
@@ -274,6 +272,21 @@ namespace DeliveryEat.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Restaurantes");
+                });
+
+            modelBuilder.Entity("DetalhesPedidoPrato", b =>
+                {
+                    b.Property<int>("ListaDetalhePedidosId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ListaPratosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ListaDetalhePedidosId", "ListaPratosId");
+
+                    b.HasIndex("ListaPratosId");
+
+                    b.ToTable("DetalhesPedidoPrato");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -433,32 +446,21 @@ namespace DeliveryEat.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DeliveryEat.Models.DetalhesPedido", b =>
-                {
-                    b.HasOne("DeliveryEat.Models.Pedido", "Pedidos")
-                        .WithMany()
-                        .HasForeignKey("PedidosFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DeliveryEat.Models.Prato", "Pratos")
-                        .WithMany("ListaDetalhePedidos")
-                        .HasForeignKey("PratoFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pedidos");
-
-                    b.Navigation("Pratos");
-                });
-
             modelBuilder.Entity("DeliveryEat.Models.Pedido", b =>
                 {
+                    b.HasOne("DeliveryEat.Models.DetalhesPedido", "DetalhesPedidos")
+                        .WithMany("ListaPedidos")
+                        .HasForeignKey("DetalhesPedidoFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DeliveryEat.Models.Pessoa", "Pessoas")
                         .WithMany("ListaPedido")
                         .HasForeignKey("PessoaFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DetalhesPedidos");
 
                     b.Navigation("Pessoas");
                 });
@@ -476,6 +478,21 @@ namespace DeliveryEat.Migrations
                         .IsRequired();
 
                     b.Navigation("Restaurante");
+                });
+
+            modelBuilder.Entity("DetalhesPedidoPrato", b =>
+                {
+                    b.HasOne("DeliveryEat.Models.DetalhesPedido", null)
+                        .WithMany()
+                        .HasForeignKey("ListaDetalhePedidosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeliveryEat.Models.Prato", null)
+                        .WithMany()
+                        .HasForeignKey("ListaPratosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -529,6 +546,11 @@ namespace DeliveryEat.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DeliveryEat.Models.DetalhesPedido", b =>
+                {
+                    b.Navigation("ListaPedidos");
+                });
+
             modelBuilder.Entity("DeliveryEat.Models.Pedido", b =>
                 {
                     b.Navigation("ListaPrato");
@@ -537,11 +559,6 @@ namespace DeliveryEat.Migrations
             modelBuilder.Entity("DeliveryEat.Models.Pessoa", b =>
                 {
                     b.Navigation("ListaPedido");
-                });
-
-            modelBuilder.Entity("DeliveryEat.Models.Prato", b =>
-                {
-                    b.Navigation("ListaDetalhePedidos");
                 });
 
             modelBuilder.Entity("DeliveryEat.Models.Restaurante", b =>
