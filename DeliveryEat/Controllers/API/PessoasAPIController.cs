@@ -7,10 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
-
-using static DeliveryEat.Models.ViewModel;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http.HttpResults;
+using static DeliveryEat.Models.ViewModel;
+
 
 namespace DeliveryEat.Controllers.Api
 {
@@ -33,6 +32,7 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PessoasAPI
         [HttpGet]
+
         public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas()
         {
             return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel
@@ -40,7 +40,6 @@ namespace DeliveryEat.Controllers.Api
                 Id = p.Id,
                 Nome = p.Nome
             }).ToListAsync();
-
         }
 
 
@@ -91,7 +90,9 @@ namespace DeliveryEat.Controllers.Api
 
         // POST: api/PessoasAPI/Register
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost("create")]
+
         public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
         {
             //cria um Utilizador com as respetivas informaçõs fornecidas
