@@ -85,9 +85,9 @@ namespace DeliveryEat.Controllers.Api
             return NoContent();
         }
 
-        // POST: api/PessoasAPI
+        // POST: api/PessoasAPI/Register
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
         {
             //cria um Utilizador com as respetivas informaçõs fornecidas
