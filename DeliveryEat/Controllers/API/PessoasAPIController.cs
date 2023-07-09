@@ -8,10 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
 using Microsoft.AspNetCore.Identity;
-
 using static DeliveryEat.Models.ViewModel;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 
 namespace DeliveryEat.Controllers.Api
 {
@@ -20,6 +18,8 @@ namespace DeliveryEat.Controllers.Api
     public class PessoasAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public PessoasAPIController(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
@@ -32,14 +32,11 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PessoasAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas()
-        {
-            return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel
-            {
+        public async Task<ActionResult<IEnumerable<PessoaViewModel>>> GetPessoas() {
+            return await _context.Pessoas.OrderBy(p => p.Nome).Select(p => new PessoaViewModel {
                 Id = p.Id,
                 Nome = p.Nome
             }).ToListAsync();
-
         }
 
 
