@@ -7,24 +7,38 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DeliveryEat.Controllers
 {
     public class PedidosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public PedidosController(ApplicationDbContext context)
+        public PedidosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Pedidos.Include(p => p.Pessoas);
-            return View(await applicationDbContext.ToListAsync());
+            // Get the current user
+            var user = await _userManager.GetUserAsync(User);
+
+            // Get the Pessoa associated with the current user
+            var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
+
+            // Get the Pedidos associated with the current Pessoa
+            var pedidos = await _context.Pedidos
+                .Where(p => p.PessoaFK == pessoa.Id)
+                .ToListAsync();
+
+            return View(pedidos);
         }
+
 
         // GET: Pedidos/Details/5
         public async Task<IActionResult> Details(int? id)

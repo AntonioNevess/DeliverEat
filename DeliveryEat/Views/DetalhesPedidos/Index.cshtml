@@ -22,25 +22,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NomePrato)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Preco)
-            </td>
-            @if (Context.User.IsInRole("Administrativo")) {
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
+                    @Html.DisplayFor(modelItem => item.NomePrato)
                 </td>
-            }
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Preco)
+                </td>
+                @if (Context.User.IsInRole("Administrativo"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Remover</a>
+                    </td>
+                }
+            </tr>
+        }
+        <form asp-action="ConfirmCart" method="post">
+            <input type="submit" value="Confirmar Pedido" />
+        </form>
+
     </tbody>
 </table>

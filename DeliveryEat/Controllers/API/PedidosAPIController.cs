@@ -23,14 +23,21 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PedidosAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
+        public async Task<ActionResult<IEnumerable<ViewModel.PedidoViewModel>>> GetPedidos()
         {
-            return await _context.Pedidos.ToListAsync();
+            var pedidos = await _context.Pedidos.ToListAsync();
+            var pedidoViewModels = pedidos.Select(p => new ViewModel.PedidoViewModel
+            {
+                Id = p.Id,
+                Confirmed = p.Confirmed
+            }).ToList();
+
+            return pedidoViewModels;
         }
 
         // GET: api/PedidosAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pedido>> GetPedido(int id)
+        public async Task<ActionResult<ViewModel.PedidoViewModel>> GetPedido(int id)
         {
             var pedido = await _context.Pedidos.FindAsync(id);
 
@@ -39,20 +46,32 @@ namespace DeliveryEat.Controllers.Api
                 return NotFound();
             }
 
-            return pedido;
+            var pedidoViewModel = new ViewModel.PedidoViewModel
+            {
+                Id = pedido.Id,
+                Confirmed = pedido.Confirmed
+            };
+
+            return pedidoViewModel;
         }
 
         // PUT: api/PedidosAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPedido(int id, Pedido pedido)
+        public async Task<IActionResult> PutPedido(int id, ViewModel.PedidoViewModel pedidoViewModel)
         {
-            if (id != pedido.Id)
+            if (id != pedidoViewModel.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(pedido).State = EntityState.Modified;
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null)
+            {
+                return NotFound();
+            }
+
+            pedido.Confirmed = pedidoViewModel.Confirmed;
 
             try
             {
@@ -76,12 +95,19 @@ namespace DeliveryEat.Controllers.Api
         // POST: api/PedidosAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Pedido>> PostPedido(Pedido pedido)
+        public async Task<ActionResult<ViewModel.PedidoViewModel>> PostPedido(ViewModel.PedidoViewModel pedidoViewModel)
         {
+            var pedido = new Pedido
+            {
+                Confirmed = pedidoViewModel.Confirmed
+            };
+
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPedido", new { id = pedido.Id }, pedido);
+            pedidoViewModel.Id = pedido.Id;
+
+            return CreatedAtAction("GetPedido", new { id = pedido.Id }, pedidoViewModel);
         }
 
         // DELETE: api/PedidosAPI/5

@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@if (User.Identity.IsAuthenticated)
+{
 <h1>Index</h1>
 
 <p>
@@ -69,3 +70,4 @@
 }
     </tbody>
 </table>
+}

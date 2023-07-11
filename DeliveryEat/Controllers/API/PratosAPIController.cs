@@ -46,7 +46,8 @@ namespace DeliveryEat.Controllers.Api
                 {
                     Id = p.Id,
                     Nome = p.Nome,
-                    Restaurante = p.Restaurante.Nome
+                    Restaurante = p.Restaurante.Nome,
+                    Preco = p.Preco,    
                 })
                 .ToListAsync();
 

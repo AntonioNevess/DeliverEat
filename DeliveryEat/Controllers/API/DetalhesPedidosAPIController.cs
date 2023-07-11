@@ -23,14 +23,23 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/DetalhesPedidosAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetalhesPedido>>> GetDetalhesPedidos()
+        public async Task<ActionResult<IEnumerable<ViewModel.DetalhesPedidoModel>>> GetDetalhesPedidos()
         {
-            return await _context.DetalhesPedidos.ToListAsync();
+            var detalhesPedidos = await _context.DetalhesPedidos.ToListAsync();
+            var detalhesPedidoModels = detalhesPedidos.Select(d => new ViewModel.DetalhesPedidoModel
+            {
+                Id = d.Id,
+                NomePrato = d.NomePrato,
+                Quantidade = d.Quantidade,
+                Preco = d.Preco
+            }).ToList();
+
+            return detalhesPedidoModels;
         }
 
         // GET: api/DetalhesPedidosAPI/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DetalhesPedido>> GetDetalhesPedido(int id)
+        public async Task<ActionResult<ViewModel.DetalhesPedidoModel>> GetDetalhesPedido(int id)
         {
             var detalhesPedido = await _context.DetalhesPedidos.FindAsync(id);
 
@@ -39,20 +48,36 @@ namespace DeliveryEat.Controllers.Api
                 return NotFound();
             }
 
-            return detalhesPedido;
+            var detalhesPedidoModel = new ViewModel.DetalhesPedidoModel
+            {
+                Id = detalhesPedido.Id,
+                NomePrato = detalhesPedido.NomePrato,
+                Quantidade = detalhesPedido.Quantidade,
+                Preco = detalhesPedido.Preco
+            };
+
+            return detalhesPedidoModel;
         }
 
         // PUT: api/DetalhesPedidosAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDetalhesPedido(int id, DetalhesPedido detalhesPedido)
+        public async Task<IActionResult> PutDetalhesPedido(int id, ViewModel.DetalhesPedidoModel detalhesPedidoModel)
         {
-            if (id != detalhesPedido.Id)
+            if (id != detalhesPedidoModel.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(detalhesPedido).State = EntityState.Modified;
+            var detalhesPedido = await _context.DetalhesPedidos.FindAsync(id);
+            if (detalhesPedido == null)
+            {
+                return NotFound();
+            }
+
+            detalhesPedido.NomePrato = detalhesPedidoModel.NomePrato;
+            detalhesPedido.Quantidade = detalhesPedidoModel.Quantidade;
+            detalhesPedido.Preco = detalhesPedidoModel.Preco;
 
             try
             {
@@ -75,14 +100,31 @@ namespace DeliveryEat.Controllers.Api
 
         // POST: api/DetalhesPedidosAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<DetalhesPedido>> PostDetalhesPedido(DetalhesPedido detalhesPedido)
+        [HttpPost("Create")]
+        public async Task<ActionResult<ViewModel.DetalhesPedidoModel>> PostDetalhesPedido(ViewModel.DetalhesPedidoModel detalhesPedidoModel)
         {
+            // Check if the referenced Pedido exists
+            var pedido = await _context.Pedidos.FindAsync(detalhesPedidoModel.Id);
+            if (pedido == null)
+            {
+                return NotFound("Pedido not found");
+            }
+
+            var detalhesPedido = new DetalhesPedido
+            {
+                NomePrato = detalhesPedidoModel.NomePrato,
+                Quantidade = detalhesPedidoModel.Quantidade,
+                Preco = detalhesPedidoModel.Preco,
+                PedidosFK = pedido.Id // Set the Pedido navigation property
+            };
+
             _context.DetalhesPedidos.Add(detalhesPedido);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDetalhesPedido", new { id = detalhesPedido.Id }, detalhesPedido);
+            detalhesPedidoModel.Id = detalhesPedido.Id;
+            return CreatedAtAction("GetDetalhesPedido", new { id = detalhesPedido.Id }, detalhesPedidoModel);
         }
+
 
         // DELETE: api/DetalhesPedidosAPI/5
         [HttpDelete("{id}")]

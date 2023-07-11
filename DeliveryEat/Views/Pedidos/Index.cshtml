@@ -2,35 +2,34 @@
 
 @{
     ViewData["Title"] = "Index";
+}@if (User.Identity.IsAuthenticated)
+{
+    <h1>Lista Pedidos</h1>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Número do Pedido
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        <a asp-action="Index" asp-controller="DetalhesPedidos" asp-route-Id="@item.Id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-
-<h1>Lista Pedidos</h1>
-
-<p>
-    <a asp-action="Create">Criar novo pedido</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Número do Pedido
-            </th>
-            
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Pessoas.Id)
-            </td>
-            <td>
-                <a asp-action="Index" asp-controller="DetalhesPedidos" asp-route-DetalhePedidoId="@item.Id">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>

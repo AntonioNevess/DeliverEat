@@ -32,7 +32,6 @@ namespace DeliveryEat.Models
         [Display(Name = "Preço")]
         public string PrecoPedidoAux { get; set; }
 
-
         //*************************
 
         /// <summary>
@@ -48,7 +47,6 @@ namespace DeliveryEat.Models
         [ForeignKey(nameof(Pratos))]
         public int PratoFK { get; set; }
         public Prato Pratos { get; set; }
-
 
     }
 }

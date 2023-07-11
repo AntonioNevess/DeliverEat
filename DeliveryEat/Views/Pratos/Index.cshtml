@@ -45,9 +45,10 @@
                 @if (User.IsInRole("Cliente"))
                 {
                     <td>
-                        <form method="post" action="@Url.Action("AddToCart", "DetalhesPedidos", new { id = item.Id })">
+                        <form asp-controller="DetalhesPedidos" asp-action="AddToCart" asp-route-id="@item.Id" method="post">
                             <button type="submit">Adicionar ao Carrinho</button>
                         </form>
+
                     </td>
                 }
                 @if (User.IsInRole("Administrativo"))

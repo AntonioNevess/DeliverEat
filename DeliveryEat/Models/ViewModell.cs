@@ -19,10 +19,21 @@
 
         }
 
+        public class DetalhesPedidoModel
+        {
+            public int Id { get; set; }
+            public string NomePrato { get; set; }  
+            
+            public int Quantidade { get; set; } 
+            public decimal Preco { get; set; }  
+            
+        }
+
         public class PratoViewModel
         {
             public int Id { get; set; }
-            public string Nome { get; set; }   
+            public string Nome { get; set; }  
+            public decimal Preco { get; set; }
             public string Restaurante { get; set; } 
         }
         public class LoginViewModel
@@ -32,6 +43,12 @@
             public string Password { get; set; }
         }
 
+        public class PedidoViewModel
+        {
+            public int Id { get; set; }
+            public bool Confirmed { get; set; }
+
+        } 
 
         public class ErrorViewModel
         {
