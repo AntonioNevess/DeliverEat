@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Pessoas)
+                Número do Pedido
             </th>
             
             <th></th>
@@ -27,8 +27,7 @@
                 @Html.DisplayFor(modelItem => item.Pessoas.Id)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Index" asp-controller="DetalhesPedidos" asp-route-DetalhePedidoId="@item.Id">Detalhes</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

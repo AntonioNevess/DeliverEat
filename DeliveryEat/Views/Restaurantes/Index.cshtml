@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NomeFotografia)
+                Pratos
             </th>
             <th></th>
         </tr>
@@ -36,9 +36,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
-            <td>
-                @Html.DisplayNameFor(model => model.NomeFotografia)
-            </td>
 
             @if (Context.User.IsInRole("Administrativo")) {
                 <td>
@@ -49,13 +46,10 @@
 
                 </td>
             }
+                <td>
+                    <a asp-action="Index" asp-controller="Pratos" asp-route-restauranteId="@item.Id">Lista Pratos</a>
+                </td>
 
-            @if (Context.User.IsInRole("Cliente")) {
-                    <td>
-                        <a asp-action="Index" asp-controller="Pratos" asp-route-restauranteId="@item.Id">Lista Pratos</a>
-                    </td>
-
-            }
         </tr>
 }
     </tbody>
