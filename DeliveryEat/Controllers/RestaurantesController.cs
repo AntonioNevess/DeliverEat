@@ -20,6 +20,7 @@ namespace DeliveryEat.Controllers
         }
 
         // GET: Restaurantes
+        //obtem todos os restaurantes
         public async Task<IActionResult> Index()
         {
               return View(await _context.Restaurantes.ToListAsync());

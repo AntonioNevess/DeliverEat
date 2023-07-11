@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Diagnostics.Contracts;
 
 namespace DeliveryEat.Controllers
 {
@@ -25,25 +26,13 @@ namespace DeliveryEat.Controllers
         // GET: DetalhesPedidos
         public async Task<IActionResult> Index(int id)
         {
-            // Get the current user
+            // Obtem o utilizador atual
             var user = await _userManager.GetUserAsync(User);
 
-            // Get the Pessoa associated with the current user
             var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-            // Get the Pedidos associated with the current Pessoa
-            /*var pedidos = await _context.Pedidos
-                .Where(p => p.PessoaFK == pessoa.Id)
-                .Select(p => p.Id)
-                .ToListAsync();*/
 
-            // Get the DetalhesPedidos associated with the current Pedidos
-            /* var cartItems = await _context.DetalhesPedidos
-                 .Where(d => pedidos.Contains(d.PedidosFK))
-                 .Include(d => d.Pratos)
-                 .ToListAsync();*/
-
-            // Get the DetalhesPedidos associated with the current Pedidos
+            // obtem os detalhes pedidos associados aos pedidos
             var cartItems = await _context.DetalhesPedidos
                 .Where(d => d.PedidosFK == id)
                 .Include(d => d.Pratos)
@@ -53,6 +42,11 @@ namespace DeliveryEat.Controllers
         }
 
 
+        /// <summary>
+        /// esta função serve para adicionarpratos do restaurnte ao "carrinho"
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> AddToCart(int? id)
         {
             if (id == null)
@@ -66,21 +60,21 @@ namespace DeliveryEat.Controllers
                 return NotFound();
             }
 
-            // Get the current user
+            // obter o utilizador 
             var user = await _userManager.GetUserAsync(User);
 
-            // Get the Pessoa associated with the current user
             var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-            // Check if a confirmed Pedido exists for the current user
+            // verificar se existe pedidos relacionados ao utilizador 
             var confirmedPedido = await _context.Pedidos
                                         .Where(p => p.PessoaFK == pessoa.Id)
                                         .FirstOrDefaultAsync();
-            Pedido pedido; // Declare the 'pedido' variable
+
+            Pedido pedido; 
 
             if (confirmedPedido != null && confirmedPedido.Confirmed)
             {
-                // Create a new Pedido since the previous one is confirmed
+                // cria um novo pedido caso o confirmedPedido nao seja null e seja true
                 pedido = new Pedido
                 {
                     PessoaFK = pessoa.Id,
@@ -92,32 +86,34 @@ namespace DeliveryEat.Controllers
             else
             {
                 pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.PessoaFK == pessoa.Id);
+                //se o pedido for null cria um novo pedido
                 if (pedido == null)
                 {
-                    // Create a new Pedido if it doesn't exist
                     pedido = new Pedido
                     {
                         PessoaFK = pessoa.Id,
                     };
 
                     _context.Pedidos.Add(pedido);
-                    await _context.SaveChangesAsync(); // Save changes so that Pedido.Id is generated
+                    await _context.SaveChangesAsync();
                 }
             }
 
+            //cria um novo detalhePedido
             var detalhesPedido = new DetalhesPedido
             {
                 PratoFK = prato.Id,
                 NomePrato = prato.Nome,
                 Quantidade = 1,
                 Preco = prato.Preco,
-                PedidosFK = pedido.Id // Use the Id of the Pedido we just retrieved or created
+                PedidosFK = pedido.Id 
             };
 
+            //adiciona à db
             _context.DetalhesPedidos.Add(detalhesPedido);
             await _context.SaveChangesAsync();
 
-            // Add the DetalhesPedido to the ListaDetalhesPedido of the Pedido
+            // adiciona a listadetalhesPedido
             pedido.ListaDetalhesPedido.Add(detalhesPedido);
             await _context.SaveChangesAsync();
 
@@ -127,13 +123,11 @@ namespace DeliveryEat.Controllers
 
         public async Task<IActionResult> ConfirmCart()
         {
-            // Get the current user
             var user = await _userManager.GetUserAsync(User);
 
-            // Get the Pessoa associated with the current user
             var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-            // Get the Pedido associated with the current Pessoa
+            // obtem o pedido da pessoa atual
             var pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.PessoaFK == pessoa.Id);
 
             if (pedido == null)
@@ -141,7 +135,8 @@ namespace DeliveryEat.Controllers
                 return NotFound();
             }
 
-            pedido.Confirmed = true; // Set the "Confirmed" flag to true
+            //mete flag a verdadeiro
+            pedido.Confirmed = true; 
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index","Restaurantes");

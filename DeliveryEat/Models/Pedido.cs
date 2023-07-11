@@ -16,7 +16,9 @@ namespace DeliveryEat.Models
         /// </summary>
         public int Id { get; set; }
 
-        // Flag to indicate if the cart is confirmed
+        /// <summary>
+        /// Flag para indicar se o pedido foi confirmado
+        /// </summary>
         public bool Confirmed { get; set; }
         public ICollection<DetalhesPedido> ListaDetalhesPedido { get; set; }
 
@@ -29,13 +31,6 @@ namespace DeliveryEat.Models
         public int PessoaFK { get; set; }
         public Pessoa Pessoas { get; set; }
 
-        /// <summary>
-        /// 
-        /// Fk para a tabela DetalhesPedido
-        /// </summary>
-        //[ForeignKey(nameof(DetalhesPedidos))]
-        //public int DetalhesPedidoFK { get; set; }
-        //public DetalhesPedido DetalhesPedidos { get; set; }
 
     }
 }

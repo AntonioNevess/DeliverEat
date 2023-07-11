@@ -66,25 +66,6 @@ namespace DeliveryEat.Models
         /// </summary>
         public ICollection<DetalhesPedido> ListaDetalhePedidos { get; set; }
 
-        //public ICollection<Restaurante> ListaRestaurantes { get; set; }
-
-
-   
-        /*
-        /// <summary>
-        /// FK para a yabela detalhe_pedido 
-        /// </summary>
-        [ForeignKey(nameof(DetalhePedidos))]
-        public int DetalhePedidoFK { get; set; }
-        public DetalhesPedido DetalhePedidos { get; set; }
-
-        /// <summary>
-        /// FK para o restaurante
-        /// </summary>
-        [ForeignKey(nameof(Restaurantes))]
-        public int RestauranteFK { get; set;}
-        public Restaurante Restaurantes { get; set; }*/
-       
 
     }
 }

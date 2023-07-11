@@ -3,83 +3,87 @@
 @{
     ViewData["Title"] = "Adidcionar Restaurante";
 }
+@if (User.Identity.IsAuthenticated)
+{
+    <h1>Criar Restaurante</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
 
-<h1>Criar Restaurante</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-
-        @* o parâmetro 'enctype' é fundamental para o formulário
+            @* o parâmetro 'enctype' é fundamental para o formulário
         enviar ficheiros
         *@
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            
-            @* espaço para mostrar as mensagens de erro gerais  *@
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
 
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control">
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
+                @* espaço para mostrar as mensagens de erro gerais  *@
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Telefone" class="control-label"></label>
-                <input asp-for="Telefone" class="form-control">
-                <span asp-validation-for="Telefone" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control">
-                <span asp-validation-for="Descricao" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control">
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control">
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Telefone" class="control-label"></label>
+                    <input asp-for="Telefone" class="form-control">
+                    <span asp-validation-for="Telefone" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Rua" class="control-label"></label>
-                <input asp-for="Rua" class="form-control">
-                <span asp-validation-for="Rua" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <input asp-for="Descricao" class="form-control">
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="CP" class="control-label"></label>
-                <input asp-for="CP" class="form-control">
-                <span asp-validation-for="CP" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
 
-            <div class="form-group">
-                <label asp-for="Localidade" class="control-label"></label>
-                <input asp-for="Localidade" class="form-control">
-                <span asp-validation-for="Localidade" class="text-danger"></span>
-            </div>
-            
-            @* recolher a imagem do restaurante *@
-            <div class="form-group">
-                <label class="control-label">Fotografia</label>
-                <input class="form-control"
-                       type="file"
-                       accept=".jpg,.jpeg,.png"
-                       name="imagemRestaurante" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="Rua" class="control-label"></label>
+                    <input asp-for="Rua" class="form-control">
+                    <span asp-validation-for="Rua" class="text-danger"></span>
+                </div>
 
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="CP" class="control-label"></label>
+                    <input asp-for="CP" class="form-control">
+                    <span asp-validation-for="CP" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Localidade" class="control-label"></label>
+                    <input asp-for="Localidade" class="form-control">
+                    <span asp-validation-for="Localidade" class="text-danger"></span>
+                </div>
+
+                @* recolher a imagem do restaurante *@
+                <div class="form-group">
+                    <label class="control-label">Fotografia</label>
+                    <input class="form-control"
+                           type="file"
+                           accept=".jpg,.jpeg,.png"
+                           name="imagemRestaurante" />
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+    @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 }

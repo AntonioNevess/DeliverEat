@@ -31,14 +31,14 @@ namespace DeliveryEat.Controllers.Api
                 return BadRequest("Restaurante ID is required.");
             }
 
-            // Retrieve the selected restaurant
+            // obtem o restaunrante atual
             var restaurante = await _context.Restaurantes.FindAsync(restauranteId);
             if (restaurante == null)
             { 
                 return NotFound("Restaurante not found.");
             }
 
-            // Retrieve the plates for the selected restaurant
+            // obtrem os pratos do restaurante
             var pratos = await _context.Pratos
                 .Where(p => p.RestauranteFK == restauranteId)
                 .Include(p => p.Restaurante)

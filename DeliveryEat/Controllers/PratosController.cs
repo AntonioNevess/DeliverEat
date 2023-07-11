@@ -20,22 +20,22 @@ namespace DeliveryEat.Controllers
         }
 
         // GET: Pratos
-        // GET: Pratos
         public async Task<IActionResult> Index(int? restauranteId)
         {
+           
             if (restauranteId == null)
             {
                 return NotFound();
             }
 
-            // Retrieve the selected restaurant
+            // get do id do restaurante selecionado
             var restaurante = await _context.Restaurantes.FindAsync(restauranteId);
             if (restaurante == null)
             {
                 return NotFound();
             }
 
-            // Retrieve the plates for the selected restaurant
+            // get dos pratos do restaurnante selecionado
             var pratos = await _context.Pratos
                 .Where(p => p.RestauranteFK == restauranteId)
                 .ToListAsync();
@@ -84,10 +84,10 @@ namespace DeliveryEat.Controllers
 
             if (ModelState.IsValid)
             {
-                // Get the selected restaurante ID from the dropdown
+               //obtem o id do restaurante selecionado da dropdown
                 int selectedRestauranteId = prato.RestauranteFK;
 
-                // Set the RestauranteFK property with the selected ID
+                // define a FK do restaurante para o respetivo id
                 prato.RestauranteFK = selectedRestauranteId;
 
                 _context.Add(prato);

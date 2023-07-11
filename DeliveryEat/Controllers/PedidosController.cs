@@ -25,13 +25,13 @@ namespace DeliveryEat.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            // Get the current user
+            // necessário obter o utilizador de sessão atual
             var user = await _userManager.GetUserAsync(User);
 
-            // Get the Pessoa associated with the current user
+            // associa a pessoa ao utilizador
             var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-            // Get the Pedidos associated with the current Pessoa
+            // obtem os pedidos relacionados ao utilziador atual
             var pedidos = await _context.Pedidos
                 .Where(p => p.PessoaFK == pessoa.Id)
                 .ToListAsync();
@@ -100,7 +100,7 @@ namespace DeliveryEat.Controllers
             {
                 return NotFound();
             }
-            //ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
+
             ViewData["PessoaFK"] = new SelectList(_context.Pessoas, "Id", "Id", pedido.PessoaFK);
             return View(pedido);
         }
@@ -137,7 +137,6 @@ namespace DeliveryEat.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["DetalhesPedidoFK"] = new SelectList(_context.DetalhesPedidos, "Id", "Id", pedido.DetalhesPedidoFK);
             ViewData["PessoaFK"] = new SelectList(_context.Pessoas, "Id", "Id", pedido.PessoaFK);
             return View(pedido);
         }
