@@ -15,7 +15,6 @@ namespace DeliveryEat.Models
 
         public Prato() { 
             ListaDetalhePedidos = new HashSet<DetalhesPedido>();
-            //ListaRestaurantes = new HashSet<Restaurante>();
         
         }
         /// <summary>

@@ -7,160 +7,112 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DeliveryEat.Data;
 using DeliveryEat.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace DeliveryEat.Controllers
 {
     public class DetalhesPedidosController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DetalhesPedidosController(ApplicationDbContext context)
+        public DetalhesPedidosController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: DetalhesPedidos
         public async Task<IActionResult> Index()
         {
+            var cartItems = await _context.DetalhesPedidos
+                .Include(d => d.Pratos)
+                .ToListAsync();
 
-              return View(await _context.DetalhesPedidos.ToListAsync());
+            return View(cartItems);
         }
 
-        // GET: DetalhesPedidos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> AddToCart(int? id)
         {
-            if (id == null || _context.DetalhesPedidos == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var detalhesPedido = await _context.DetalhesPedidos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (detalhesPedido == null)
+            var prato = await _context.Pratos.FindAsync(id);
+            if (prato == null)
             {
                 return NotFound();
             }
 
-            return View(detalhesPedido);
-        }
+            // Get the current user
+            var user = await _userManager.GetUserAsync(User);
 
-        // GET: DetalhesPedidos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+            // Get the Pessoa associated with the current user
+            var pessoa = await _context.Pessoas.FirstOrDefaultAsync(p => p.UserId == user.Id);
 
-        // POST: DetalhesPedidos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomePrato,Quantidade,Preco,PrecoPedidoAux")] DetalhesPedido detalhesPedido)
-        {
-            if (!string.IsNullOrEmpty(detalhesPedido.PrecoPedidoAux)) {
-                detalhesPedido.Preco = Convert.ToDecimal(detalhesPedido.PrecoPedidoAux.Replace('.', ','));
-            }
+            // Check if a Pedido exists for the current user
+            Pedido pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.PessoaFK == pessoa.Id);
 
-            if (ModelState.IsValid)
+            if (pedido == null)
             {
-                _context.Add(detalhesPedido);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(detalhesPedido);
-        }
-
-        // GET: DetalhesPedidos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.DetalhesPedidos == null)
-            {
-                return NotFound();
-            }
-
-            var detalhesPedido = await _context.DetalhesPedidos.FindAsync(id);
-            if (detalhesPedido == null)
-            {
-                return NotFound();
-            }
-            return View(detalhesPedido);
-        }
-
-        // POST: DetalhesPedidos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomePrato,Quantidade,Preco")] DetalhesPedido detalhesPedido)
-        {
-            if (id != detalhesPedido.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                // Create a new Pedido if it doesn't exist
+                pedido = new Pedido
                 {
-                    _context.Update(detalhesPedido);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DetalhesPedidoExists(detalhesPedido.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(detalhesPedido);
-        }
+                    PessoaFK = pessoa.Id,
+                };
 
-        // GET: DetalhesPedidos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.DetalhesPedidos == null)
-            {
-                return NotFound();
+                _context.Pedidos.Add(pedido);
+                await _context.SaveChangesAsync(); // Save changes so that Pedido.Id is generated
             }
 
-            var detalhesPedido = await _context.DetalhesPedidos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (detalhesPedido == null)
+            var detalhesPedido = new DetalhesPedido
             {
-                return NotFound();
-            }
+                PratoFK = prato.Id,
+                NomePrato = prato.Nome,
+                Quantidade = 1,
+                Preco = prato.Preco,
+                PedidosFK = pedido.Id // Use the Id of the Pedido we just retrieved or created
+            };
 
-            return View(detalhesPedido);
-        }
-
-        // POST: DetalhesPedidos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.DetalhesPedidos == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.DetalhesPedidos'  is null.");
-            }
-            var detalhesPedido = await _context.DetalhesPedidos.FindAsync(id);
-            if (detalhesPedido != null)
-            {
-                _context.DetalhesPedidos.Remove(detalhesPedido);
-            }
-            
+            _context.DetalhesPedidos.Add(detalhesPedido);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DetalhesPedidoExists(int id)
+
+
+
+
+        // GET: DetalhesPedidos/RemoveFromCart/5
+        public async Task<IActionResult> RemoveFromCart(int? id)
         {
-          return _context.DetalhesPedidos.Any(e => e.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var detalhesPedido = await _context.DetalhesPedidos.FindAsync(id);
+            if (detalhesPedido == null)
+            {
+                return NotFound();
+            }
+
+            _context.DetalhesPedidos.Remove(detalhesPedido);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: DetalhesPedidos/ClearCart
+        public async Task<IActionResult> ClearCart()
+        {
+            var cartItems = await _context.DetalhesPedidos.ToListAsync();
+            _context.DetalhesPedidos.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

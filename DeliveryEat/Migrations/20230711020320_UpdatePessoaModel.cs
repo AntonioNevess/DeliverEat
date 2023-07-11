@@ -5,7 +5,7 @@
 namespace DeliveryEat.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatecriacaoRoles : Migration
+    public partial class UpdatePessoaModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -29,15 +29,15 @@ namespace DeliveryEat.Controllers
         // GET: Pedidos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Pedidos == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var pedido = await _context.Pedidos
-                //.Include(p => p.DetalhesPedidos)
                 .Include(p => p.Pessoas)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (pedido == null)
             {
                 return NotFound();
@@ -45,6 +45,7 @@ namespace DeliveryEat.Controllers
 
             return View(pedido);
         }
+
 
         // GET: Pedidos/Create
         public IActionResult Create()

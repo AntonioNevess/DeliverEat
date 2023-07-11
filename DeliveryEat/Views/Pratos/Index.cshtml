@@ -45,7 +45,9 @@
                 @if (User.IsInRole("Cliente"))
                 {
                     <td>
-                        @Html.DisplayFor(modelItem => item.RestauranteFK)
+                        <form method="post" action="@Url.Action("AddToCart", "DetalhesPedidos", new { id = item.Id })">
+                            <button type="submit">Adicionar ao Carrinho</button>
+                        </form>
                     </td>
                 }
                 @if (User.IsInRole("Administrativo"))

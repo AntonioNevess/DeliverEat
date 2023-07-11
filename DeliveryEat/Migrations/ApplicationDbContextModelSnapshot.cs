@@ -210,9 +210,6 @@ namespace DeliveryEat.Migrations
                     b.Property<string>("NomeFotografia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PedidoId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(18,2)");
 
@@ -220,8 +217,6 @@ namespace DeliveryEat.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PedidoId");
 
                     b.HasIndex("RestauranteFK");
 
@@ -436,7 +431,7 @@ namespace DeliveryEat.Migrations
             modelBuilder.Entity("DeliveryEat.Models.DetalhesPedido", b =>
                 {
                     b.HasOne("DeliveryEat.Models.Pedido", "Pedidos")
-                        .WithMany()
+                        .WithMany("ListaDetalhesPedido")
                         .HasForeignKey("PedidosFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -465,10 +460,6 @@ namespace DeliveryEat.Migrations
 
             modelBuilder.Entity("DeliveryEat.Models.Prato", b =>
                 {
-                    b.HasOne("DeliveryEat.Models.Pedido", null)
-                        .WithMany("ListaPrato")
-                        .HasForeignKey("PedidoId");
-
                     b.HasOne("DeliveryEat.Models.Restaurante", "Restaurante")
                         .WithMany("ListaPratos")
                         .HasForeignKey("RestauranteFK")
@@ -531,7 +522,7 @@ namespace DeliveryEat.Migrations
 
             modelBuilder.Entity("DeliveryEat.Models.Pedido", b =>
                 {
-                    b.Navigation("ListaPrato");
+                    b.Navigation("ListaDetalhesPedido");
                 });
 
             modelBuilder.Entity("DeliveryEat.Models.Pessoa", b =>

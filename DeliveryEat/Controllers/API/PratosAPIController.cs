@@ -24,15 +24,33 @@ namespace DeliveryEat.Controllers.Api
 
         // GET: api/PratosAPI
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PratoViewModel>>> GetPratos()
+        public async Task<ActionResult<IEnumerable<PratoViewModel>>> GetPratos(int? restauranteId)
         {
-            return await _context.Pratos.Include(p => p.Restaurante)
+            if (restauranteId == null)
+            {
+                return BadRequest("Restaurante ID is required.");
+            }
+
+            // Retrieve the selected restaurant
+            var restaurante = await _context.Restaurantes.FindAsync(restauranteId);
+            if (restaurante == null)
+            { 
+                return NotFound("Restaurante not found.");
+            }
+
+            // Retrieve the plates for the selected restaurant
+            var pratos = await _context.Pratos
+                .Where(p => p.RestauranteFK == restauranteId)
+                .Include(p => p.Restaurante)
                 .Select(p => new PratoViewModel
                 {
                     Id = p.Id,
                     Nome = p.Nome,
                     Restaurante = p.Restaurante.Nome
-                }).ToListAsync();
+                })
+                .ToListAsync();
+
+            return pratos;
         }
 
         // GET: api/PratosAPI/5
@@ -40,17 +58,18 @@ namespace DeliveryEat.Controllers.Api
         public async Task<ActionResult<PratoViewModel>> GetPrato(int id)
         {
             var prato = await _context.Pratos.Include(p => p.Restaurante)
+                .Where(p => p.Id == id)
                 .Select(p => new PratoViewModel
                 {
                     Id = p.Id,
                     Nome = p.Nome,
                     Restaurante = p.Restaurante.Nome
-                }).Where(p => p.Id == id).FirstOrDefaultAsync();
-
+                })
+                .FirstOrDefaultAsync();
 
             if (prato == null)
             {
-                return NotFound();
+                return NotFound("Prato not found.");
             }
 
             return prato;
